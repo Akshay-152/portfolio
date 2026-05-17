@@ -1,0 +1,203 @@
+.neon-cube-loader,
+.neon-cube-loader * {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+}
+
+.loader-demo {
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  background: #1e1e1e;
+  font-family: Arial, sans-serif;
+}
+
+.loader-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(20, 62, 69, 0.128) 42%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(180deg, #0a0a0a 0%, #080a0b 48%, #000 100%);
+}
+
+.neon-cube-loader {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 360px;
+  overflow: hidden;
+  color: hsl(195deg, 100%, 58%);
+  isolation: isolate;
+  perspective: 45rem;
+  transform-style: preserve-3d;
+}
+
+.neon-cube-loader.is-transitioning {
+  pointer-events: none;
+}
+
+.neon-cube-loader canvas {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 4px currentColor) drop-shadow(0 0 14px currentColor)
+    drop-shadow(0 0 34px rgba(0, 162, 255, 0.65));
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.loader-progress {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(34px, 7vh, 70px);
+  z-index: 2;
+  width: clamp(180px, 34vw, 320px);
+  transform: translateX(-50%);
+  transition:
+    opacity 0.26s ease,
+    transform 0.26s ease;
+}
+
+.neon-cube-loader.is-transitioning .loader-progress {
+  opacity: 0;
+  transform: translateX(-50%) translateY(14px);
+}
+
+.loader-beam-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.loader-beam-transition .beam-vertical {
+  position: absolute;
+  width: 2px;
+  height: 0;
+  background: #00d8ff;
+  box-shadow:
+    0 0 20px 4px #00d8ff,
+    0 0 60px 10px #00d8ff;
+  opacity: 0;
+}
+
+.loader-beam-transition .beam-horizontal {
+  position: absolute;
+  width: 100vw;
+  height: 0;
+  background: #505153;
+  box-shadow:
+    0 0 40px 10px #00d8ff,
+    0 0 80px 20px #a19e9e;
+  opacity: 0;
+}
+
+.loader-beam-transition .flash {
+  position: absolute;
+  inset: 0;
+  background: #000000eb;
+  opacity: 0;
+}
+
+.neon-cube-loader.is-transitioning canvas {
+  cursor: default;
+}
+
+.loader-progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+  color: rgba(121, 128, 130, 0.84);
+  font-family: Arial, sans-serif;
+  font-size: clamp(10px, 1.8vw, 12px);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(0, 216, 255, 0.42);
+}
+
+.loader-progress-value {
+  min-width: 4ch;
+  text-align: right;
+  color: rgba(173, 162, 162, 0.74);
+}
+
+.loader-progress-track {
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(0, 216, 255, 0.18),
+    0 0 16px rgba(0, 216, 255, 0.2),
+    inset 0 0 10px rgba(0, 0, 0, 0.44);
+}
+
+.loader-progress-track span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.479),
+    rgba(0, 216, 255, 0.92)
+  );
+  box-shadow: 0 0 14px rgba(0, 216, 255, 0.9);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.loader-progress-track::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.22),
+    transparent
+  );
+  opacity: 0.5;
+  transform: translateX(-100%);
+  animation: progress-shine 1.2s linear infinite;
+}
+
+@keyframes progress-shine {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 720px) {
+  .neon-cube-loader {
+    width: 100vw;
+    height: 100vh;
+    min-height: 420px;
+  }
+
+  .loader-progress {
+    bottom: 12vh;
+    width: min(260px, 70vw);
+  }
+}

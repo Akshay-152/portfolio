@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+
+  <link rel="stylesheet" href="homestyle.css">
+</head>
+
+<body>
+  <!-- Glassy Navbar -->
+  <nav class="glass-navbar">
+    <div class="logo">AKSHAY PK</div>
+
+    <!-- Collapsible Chronograph Navigation (Matrix Drawer) Button moved into Navbar -->
+    <button id="menu-open-btn"
+      class="h-10 w-10 flex flex-col items-center justify-center border border-neutral-800/50 rounded-lg bg-neutral-900/30 hover:bg-neutral-800/50 transition-all duration-300 group gap-1"
+      aria-label="Toggle menu">
+      <span class="w-5 h-[2px] bg-neutral-200 transition-all duration-300 origin-center"></span>
+      <span class="w-5 h-[2px] bg-neutral-200 transition-all duration-300 origin-center"></span>
+      <span class="w-5 h-[2px] bg-neutral-200 transition-all duration-300 origin-center"></span>
+    </button>
+  </nav>
+
+  <!-- DotField Background -->
+  <div id="dotFieldCanvasContainer">
+    <canvas id="bgCanvas"></canvas>
+    <svg id="bgSvg" style="
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          z-index: -1;
+        ">
+      <defs>
+        <radialGradient id="glowGrad">
+          <stop offset="0%" stop-color="#120F17" />
+          <stop offset="100%" stop-color="transparent" />
+        </radialGradient>
+      </defs>
+      <circle id="bgGlow" cx="-9999" cy="-9999" r="160" fill="url(#glowGrad)"
+        style="opacity: 0; will-change: opacity" />
+    </svg>
+  </div>
+
+  <!-- Splash Cursor Canvas -->
+  <canvas id="splashCursorCanvas"></canvas>
+
+  <!-- Full Page Menu -->
+  <div class="fullPageMenu" id="fullMenu" aria-hidden="true">
+    <div class="banner">
+      <img
+        src="https://images.unsplash.com/photo-1453989799106-bbad8d7b5191?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80"
+        alt="banner" />
+    </div>
+    <div class="nav-content">
+      <ul>
+        <li><a href="#" data-text="Home" onclick="toggleMenu()">Home</a></li>
+        <li>
+          <a href="#about" data-text="About" onclick="toggleMenu()">About</a>
+        </li>
+        <li>
+          <a href="#services" data-text="Dynamic Effects" onclick="toggleMenu()">Dynamic Effects</a>
+        </li>
+        <li>
+          <a href="#portfolio" data-text="Portfolio" onclick="toggleMenu()">Portfolio</a>
+        </li>
+        <li>
+          <a href="#team" data-text="Team" onclick="toggleMenu()">Team</a>
+        </li>
+        <li>
+          <a href="#contact" data-text="Contact" onclick="toggleMenu()">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="menu-backdrop"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"
+    aria-hidden="true"></div>
+
+  <nav id="clock-drawer"
+    class="fixed right-0 top-0 h-screen w-96 bg-[#0e0e11] border-l border-neutral-900 z-50 shadow-2xl translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-center pl-16 pr-0"
+    aria-hidden="true">
+    <div class="absolute top-8 right-8">
+      <button id="menu-close-btn"
+        class="h-10 w-10 flex items-center justify-center text-sm font-black text-neutral-500 hover:text-indigo-400 active:scale-90 transition-all duration-200"
+        aria-label="Close matrix drawer">
+        ✕
+      </button>
+    </div>
+
+    <div id="ticks-matrix" class="w-full flex flex-col justify-between h-[82vh] py-6 pr-0 items-end relative"></div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="landing-image">
+      <img src="profile.png" alt="Profile Photo" class="profile-photo" />
+    </div>
+
+    <div class="landing-text">
+      <h1>AKSHAY PK</h1>
+      <p id="changing-text" style="transition: opacity 0.5s ease; opacity: 1;">Welcome to my page</p>
+    </div>
+
+    <div class="scroll-indicator" onclick="
+          document
+            .getElementById('content')
+            .scrollIntoView({ behavior: 'smooth' })
+        ">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M19 12l-7 7-7-7" />
+      </svg>
+    </div>
+  </header>
+
+  <!-- Content Section -->
+  <section id="content" class="content-section">
+    <div class="content-container">
+      <h2 style="
+            font-family: &quot;Poppins&quot;, sans-serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+          ">
+        Featured Works
+      </h2>
+
+      <!-- Smooth Slow Slider -->
+      <div class="slider" id="autoSlider">
+        <div class="slide">
+          <h3>Project 1</h3>
+          <p>Interactive Design</p>
+        </div>
+        <div class="slide">
+          <h3>Project 2</h3>
+          <p>WebGL Experiences</p>
+        </div>
+        <div class="slide">
+          <h3>Project 3</h3>
+          <p>Creative Coding</p>
+        </div>
+        <div class="slide">
+          <h3>Project 4</h3>
+          <p>UI/UX Prototyping</p>
+        </div>
+        <div class="slide">
+          <h3>Project 5</h3>
+          <p>Responsive Layouts</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="content-section">
+    <div class="content-container">
+      <h2 style="
+            font-family: &quot;Poppins&quot;, sans-serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+          ">
+        About
+      </h2>
+      <div class="content-grid">
+        <div class="glass-card" style="grid-column: span 12; padding: 2rem">
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.2rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.65;
+              ">
+            Antigravity is a design playground combining motion, depth, and
+            responsive interfaces. This page pairs a dot-field background with
+            a splash-cursor WebGL effect for a “living” feel.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="content-section">
+    <div class="content-container">
+      <h2 style="
+            font-family: &quot;Poppins&quot;, sans-serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+          ">
+        Services
+      </h2>
+      <div class="content-grid">
+        <div class="glass-card" style="grid-column: span 4; padding: 2rem">
+          <h3 style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+              ">
+            UI/UX
+          </h3>
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+              ">
+            Full responsive UX and interaction design.
+          </p>
+        </div>
+        <div class="glass-card" style="grid-column: span 4; padding: 2rem">
+          <h3 style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+              ">
+            WebGL Effects
+          </h3>
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+              ">
+            GPU-accelerated visuals optimized for performance.
+          </p>
+        </div>
+        <div class="glass-card" style="grid-column: span 4; padding: 2rem">
+          <h3 style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+              ">
+            Motion Systems
+          </h3>
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+              ">
+            Reduced-motion aware animations and transitions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="content-section">
+    <div class="content-container">
+      <h2 style="
+            font-family: &quot;Poppins&quot;, sans-serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+          ">
+        Portfolio
+      </h2>
+      <div class="content-grid">
+        <div class="glass-card" style="grid-column: span 6; padding: 2rem">
+          <h3 style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 2rem;
+                margin-bottom: 0.8rem;
+              ">
+            Interactive Galleries
+          </h3>
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+              ">
+            Scroll-snap sliders and smooth RAF-driven motion.
+          </p>
+        </div>
+        <div class="glass-card" style="grid-column: span 6; padding: 2rem">
+          <h3 style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 2rem;
+                margin-bottom: 0.8rem;
+              ">
+            Cursor-driven FX
+          </h3>
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+              ">
+            Splash-cursor effects that react to touch + mouse.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" class="content-section">
+    <div class="content-container">
+      <h2 style="
+            font-family: &quot;Poppins&quot;, sans-serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+          ">
+        Team
+      </h2>
+      <div class="content-grid">
+        <div class="glass-card" style="grid-column: span 4; padding: 2rem">
+          <h3 style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.7rem;
+                margin-bottom: 0.6rem;
+              ">
+            Designer
+          </h3>
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+              ">
+            Crafts interaction, layout, and visual rhythm.
+          </p>
+        </div>
+        <div class="glass-card" style="grid-column: span 4; padding: 2rem">
+          <h3 style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.7rem;
+                margin-bottom: 0.6rem;
+              ">
+            Engineer
+          </h3>
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+              ">
+            Builds performant canvas/WebGL systems.
+          </p>
+        </div>
+        <div class="glass-card" style="grid-column: span 4; padding: 2rem">
+          <h3 style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.7rem;
+                margin-bottom: 0.6rem;
+              ">
+            Motion
+          </h3>
+          <p style="
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.05rem;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.6;
+              ">
+            Keeps transitions smooth and accessible.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="content-section" style="margin-top: -1px">
+    <div class="content-container">
+      <h2 style="
+            font-family: &quot;Poppins&quot;, sans-serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+          ">
+        Contact
+      </h2>
+      <div class="glass-card" style="padding: 2rem">
+        <p style="
+              font-family: &quot;Poppins&quot;, sans-serif;
+              font-size: 1.2rem;
+              color: rgba(255, 255, 255, 0.8);
+              line-height: 1.65;
+            ">
+          Want to build something with motion + depth? Hook up your contact
+          form here. For now, the section exists so the menu links can scroll
+          correctly.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="dotfield.js"></script>
+  <script src="splashcursor.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script>
+    const prefersReducedMotion =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // NOTE: The user-requested React DotField code snippet is implemented in this repo
+    // via the existing static DotField canvas implementation in: home/dotfield.js.
+    // So we only keep the landing UI markup here.
+
+
+    // Full-page overlay menu toggle (kept for the existing menu button)
+    function toggleMenu() {
+      const menu = document.getElementById("fullMenu");
+      if (!menu) return;
+      menu.classList.toggle("active");
+      const active = menu.classList.contains("active");
+      menu.setAttribute("aria-hidden", String(!active));
+    }
+
+
+    // Improve anchor scrolling + close menus on navigation
+    document.addEventListener("click", (e) => {
+      const a =
+        e.target && e.target.closest
+          ? e.target.closest('a[href^="#"]')
+          : null;
+      if (!a) return;
+
+      const href = a.getAttribute("href");
+      if (!href || href === "#") return;
+
+      const targetId = href.slice(1);
+      const el = document.getElementById(targetId);
+      if (!el) return; // fall back to default behavior if section doesn't exist
+
+      e.preventDefault();
+
+      // Close full-page overlay menu
+      const menu = document.getElementById("fullMenu");
+      if (menu && menu.classList.contains("active")) menu.classList.remove("active");
+
+      // Close matrix drawer
+      const drawer = document.getElementById("clock-drawer");
+      const backdrop = document.getElementById("menu-backdrop");
+      if (drawer) drawer.classList.add("translate-x-full");
+      if (backdrop) backdrop.classList.add("opacity-0", "pointer-events-none");
+
+      el.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "start",
+      });
+
+      return false;
+    });
+
+    // Collapsible Chronograph Navigation (Matrix Drawer)
+    const openBtn = document.getElementById("menu-open-btn");
+    const closeBtn = document.getElementById("menu-close-btn");
+    const drawer = document.getElementById("clock-drawer");
+    const backdrop = document.getElementById("menu-backdrop");
+    const matrixContainer = document.getElementById("ticks-matrix");
+
+    const TOTAL_TICKS = 68;
+    let isMenuOpen = false;
+    const tickRows = [];
+
+    const majorMarkers = {
+      10: { label: "HOME", href: "#content" },
+      26: { label: "ABOUT", href: "#about" },
+      42: { label: "SERVICES", href: "#services" },
+      58: { label: "PRICING", href: "#portfolio" },
+    };
+
+    function openDrawer(open) {
+      if (!drawer) return;
+      isMenuOpen = open;
+
+      const btnSpans = document.querySelectorAll("#menu-open-btn span");
+
+      if (open) {
+        drawer.classList.remove("translate-x-full");
+        backdrop && backdrop.classList.remove("opacity-0", "pointer-events-none");
+        drawer.setAttribute("aria-hidden", "false");
+
+        if (btnSpans.length === 3) {
+          btnSpans[0].classList.add("translate-y-[6px]", "rotate-45");
+          btnSpans[1].classList.add("opacity-0");
+          btnSpans[2].classList.add("-translate-y-[6px]", "-rotate-45");
+        }
+      } else {
+        drawer.classList.add("translate-x-full");
+        backdrop && backdrop.classList.add("opacity-0", "pointer-events-none");
+        drawer.setAttribute("aria-hidden", "true");
+
+        if (btnSpans.length === 3) {
+          btnSpans[0].classList.remove("translate-y-[6px]", "rotate-45");
+          btnSpans[1].classList.remove("opacity-0");
+          btnSpans[2].classList.remove("-translate-y-[6px]", "-rotate-45");
+        }
+
+        // reset widths after collapse
+        setTimeout(() => evaluateWaveEngine(0), 0);
+      }
+    }
+
+    function evaluateWaveEngine(targetY) {
+      if (!isMenuOpen) return;
+      tickRows.forEach((row) => {
+        const line = row.querySelector(".tick-line");
+        const label = row.querySelector(".nav-link");
+        const isMajor = row.dataset.isMajor === "true";
+        const baseWidth = parseInt(row.dataset.baseWidth, 10);
+
+        const rowRect = row.getBoundingClientRect();
+        const rowCenterY = rowRect.top + rowRect.height / 2;
+        const distance = Math.abs(targetY - rowCenterY);
+
+        const radius = 160;
+
+        if (distance < radius) {
+          const factor = 1 - distance / radius;
+          const smoothFactor = Math.pow(factor, 2.2);
+          const addedStretch = smoothFactor * 85;
+
+          if (line) line.style.width = `${baseWidth + addedStretch}px`;
+
+          if (isMajor) {
+            if (line) {
+              line.style.background = "linear-gradient(to left, #818cf8, #22c55e)";
+              line.style.height = "2.5px";
+            }
+            if (label) {
+              label.style.color = "#f5f5f5";
+              label.style.transform = `translateX(${-smoothFactor * 6}px)`;
+            }
+          } else {
+            if (line) {
+              line.style.background = `linear-gradient(to left, rgba(99, 102, 241, ${0.25 + smoothFactor * 0.65}), rgba(34, 197, 94, ${0.25 + smoothFactor * 0.65}))`;
+              line.style.height = "1.5px";
+            }
+          }
+        } else {
+          if (line) {
+            line.style.width = `${baseWidth}px`;
+            line.style.height = isMajor ? "2px" : "1px";
+          }
+
+          if (isMajor) {
+            if (line) line.style.background = "#404040";
+            if (label && !label.classList.contains("text-indigo-400")) {
+              label.style.color = "";
+              label.style.transform = "translateX(0px)";
+            }
+          } else {
+            if (line) line.style.background = "rgba(38, 38, 38, 0.4)";
+          }
+        }
+      });
+    }
+
+    // Build ticks once
+    if (matrixContainer) {
+      for (let i = 0; i < TOTAL_TICKS; i++) {
+        const row = document.createElement("div");
+        row.className =
+          "flex items-center justify-end w-full h-[6px] relative group/row";
+
+        const isMajor = majorMarkers[i] !== undefined;
+        row.dataset.isMajor = isMajor;
+        row.dataset.baseWidth = isMajor ? "44" : "12";
+
+        if (isMajor) {
+          const data = majorMarkers[i];
+          row.innerHTML = `
+              <a href="${data.href}" class="nav-link absolute right-[76px] text-right text-[20px] font-black uppercase tracking-widest text-neutral-500 hover:text-white transition-all duration-200 outline-none">
+                ${data.label}
+              </a>
+              <div class="tick-line h-[2px] w-11 bg-neutral-700 tick-transition origin-right"></div>
+            `;
+          const link = row.querySelector("a");
+          if (link) {
+            link.addEventListener("click", () => {
+              document.querySelectorAll(".nav-link").forEach((l) =>
+                l.classList.remove("text-indigo-400"),
+              );
+              link.classList.add("text-indigo-400");
+              // allow global click handler to handle scrolling + drawer close
+            });
+          }
+        } else {
+          row.innerHTML = `
+              <div class="tick-line h-[1px] w-3 bg-neutral-800/80 tick-transition origin-right"></div>
+            `;
+        }
+
+        matrixContainer.appendChild(row);
+        tickRows.push(row);
+      }
+    }
+
+    openBtn && openBtn.addEventListener("click", () => openDrawer(true));
+    closeBtn && closeBtn.addEventListener("click", () => openDrawer(false));
+    backdrop && backdrop.addEventListener("click", () => openDrawer(false));
+
+    drawer &&
+      drawer.addEventListener("mousemove", (e) => evaluateWaveEngine(e.clientY));
+    drawer && drawer.addEventListener("mouseleave", () => evaluateWaveEngine(0));
+
+    // Initialize Background DotField
+    const bgCanvas = document.getElementById("bgCanvas");
+    const bgGlow = document.getElementById("bgGlow");
+    if (typeof initDotField === "function" && bgCanvas) {
+      initDotField(bgCanvas, document.getElementById("bgSvg"), bgGlow, {
+        dotRadius: prefersReducedMotion ? 1.25 : 1.5,
+        dotSpacing: prefersReducedMotion ? 16 : 14,
+        cursorRadius: prefersReducedMotion ? 360 : 500,
+        cursorForce: prefersReducedMotion ? 0.07 : 0.1,
+        bulgeOnly: true,
+        bulgeStrength: prefersReducedMotion ? 45 : 67,
+        glowRadius: prefersReducedMotion ? 140 : 160,
+        sparkle: !prefersReducedMotion,
+        gradientFrom: "#22c55e",
+        gradientTo: "#4ade80",
+      });
+    }
+
+    // Initialize SplashCursor
+    const splashCanvas = document.getElementById("splashCursorCanvas");
+    if (typeof initSplashCursor === "function" && splashCanvas) {
+      initSplashCursor(splashCanvas, {
+        DENSITY_DISSIPATION: 3.5,
+        VELOCITY_DISSIPATION: 2,
+        PRESSURE: 0.1,
+        CURL: 3,
+        SPLAT_RADIUS: 0.2,
+        SPLAT_FORCE: 6000,
+        COLOR_UPDATE_SPEED: 10,
+        SHADING: true,
+        RAINBOW_MODE: false,
+        COLOR: "#22c55e",
+      });
+    }
+
+    // Auto slow scrolling slider logic (smooth RAF with lerp)
+    const slider = document.getElementById("autoSlider");
+    let isHovering = false;
+    let isInteracting = false;
+
+    if (slider) {
+      slider.addEventListener("mouseenter", () => (isHovering = true));
+      slider.addEventListener("mouseleave", () => (isHovering = false));
+
+      // Pause while using touch/drag
+      slider.addEventListener("touchstart", () => (isInteracting = true), {
+        passive: true,
+      });
+      slider.addEventListener("touchend", () => (isInteracting = false), {
+        passive: true,
+      });
+
+      let target = slider.scrollLeft;
+      let lastTs = performance.now();
+      const speedPxPerSecond = 18; // slow
+
+      function tick(ts) {
+        const dt = Math.min(0.05, (ts - lastTs) / 1000);
+        lastTs = ts;
+
+        if (!isHovering && !isInteracting) {
+          target += speedPxPerSecond * dt;
+
+          const maxScroll = Math.max(
+            0,
+            slider.scrollWidth - slider.clientWidth,
+          );
+          if (target >= maxScroll) {
+            target = 0;
+            slider.scrollLeft = 0;
+          }
+
+          // Smooth approach to target
+          slider.scrollLeft += (target - slider.scrollLeft) * 0.08;
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    // Changing Text Logic
+    const phrases = [
+      "Welcome to my page",
+      "I am a passionate developer",
+      "I craft dynamic experiences",
+      "I build beautiful interfaces",
+      "Let's build something amazing"
+    ];
+    let phraseIdx = 0;
+    const changingText = document.getElementById("changing-text");
+    if (changingText) {
+      setInterval(() => {
+        changingText.style.opacity = 0;
+        setTimeout(() => {
+          phraseIdx = (phraseIdx + 1) % phrases.length;
+          changingText.textContent = phrases[phraseIdx];
+          changingText.style.opacity = 1;
+        }, 500);
+      }, 4000);
+    }
+
+    // Parallax background logic (move background slightly based on mouse)
+    if (!prefersReducedMotion) {
+      let raf = 0;
+      let lastX = 0;
+      let lastY = 0;
+      const dotContainer = document.getElementById("dotFieldCanvasContainer");
+
+      document.addEventListener(
+        "mousemove",
+        (e) => {
+          const x = (e.clientX / window.innerWidth - 0.5) * 20;
+          const y = (e.clientY / window.innerHeight - 0.5) * 20;
+          lastX = x;
+          lastY = y;
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            if (dotContainer)
+              dotContainer.style.transform = `translate(${lastX}px, ${lastY}px)`;
+          });
+        },
+        { passive: true },
+      );
+    }
+
+    // Initialize VanillaTilt
+    if (typeof VanillaTilt !== "undefined" && !prefersReducedMotion) {
+      VanillaTilt.init(document.querySelectorAll(".glass-card, .slide"), {
+        max: 12,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.25,
+      });
+    }
+  </script>
+</body>
+
+</html>
