@@ -36,7 +36,8 @@ html {
   height: 100vh;
   min-height: 360px;
   overflow: hidden;
-  color: hsl(195deg, 100%, 58%);
+  color: #A855F7;
+
   isolation: isolate;
   perspective: 45rem;
   transform-style: preserve-3d;
