@@ -1,0 +1,488 @@
+<!doctype html>
+<html class="scroll-smooth cursor-default" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Preconnect to optimize font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+    <!-- Favicon Declaration -->
+    <link rel="icon" type="image/png" href="https://anushkaisuranga.github.io/favicon.webp" />
+    <link rel="apple-touch-icon" href="https://anushkaisuranga.github.io/favicon.webp" />
+    <link rel="shortcut icon" href="https://anushkaisuranga.github.io/favicon.webp" />
+    <!-- Sitemap Declaration -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07111f" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background:
+          radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 28%),
+          radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.18), transparent 20%),
+          linear-gradient(180deg, #050816 0%, #0b1330 52%, #050816 100%);
+      }
+
+      body {
+        color: #f8fafc;
+        font-family: 'Segoe UI', sans-serif;
+      }
+
+      #boot-preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 24px;
+        background:
+          radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 28%),
+          radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.18), transparent 20%),
+          linear-gradient(180deg, #050816 0%, #0b1330 52%, #050816 100%);
+        transition:
+          opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      #boot-preloader::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        opacity: 0.18;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 80px 80px;
+        pointer-events: none;
+      }
+
+      #boot-preloader.is-hidden {
+        opacity: 0;
+        transform: scale(1.015);
+        pointer-events: none;
+      }
+
+      .boot-top,
+      .boot-center,
+      .boot-bottom {
+        position: relative;
+        z-index: 2;
+      }
+
+      .boot-background {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .boot-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .boot-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .boot-brand img {
+        width: 44px;
+        height: 44px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.05);
+        padding: 4px;
+      }
+
+      .boot-name {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .boot-role,
+      .boot-skip,
+      .boot-kicker,
+      .boot-meta span {
+        font-size: 11px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .boot-role,
+      .boot-skip,
+      .boot-meta span {
+        color: rgba(255, 255, 255, 0.38);
+      }
+
+      .boot-center {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .boot-center-inner {
+        width: 100%;
+        max-width: 900px;
+        text-align: center;
+      }
+
+      .boot-dotfield {
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      .boot-kicker {
+        color: #93c5fd;
+      }
+
+      .boot-word {
+        margin: 28px 0 0;
+        font-size: clamp(3.8rem, 13vw, 8.5rem);
+        font-weight: 700;
+        line-height: 0.88;
+        letter-spacing: -0.06em;
+        color: rgba(255, 255, 255, 0.14);
+      }
+
+      .boot-capsule {
+        width: 100%;
+        max-width: 560px;
+        margin: -2vh auto 0;
+        padding: 20px;
+        border-radius: 32px;
+        border: 1px solid rgba(165, 180, 252, 0.2);
+        background: rgba(0, 0, 0, 0.7);
+        box-shadow: 0 30px 90px rgba(2, 8, 23, 0.45);
+        backdrop-filter: blur(22px);
+      }
+
+      @media (max-width: 1024px) {
+        .boot-background {
+          display: none;
+        }
+
+        .boot-capsule {
+          max-width: 420px;
+          padding: 18px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .boot-capsule {
+          max-width: 250px;
+          padding: 16px;
+        }
+      }
+
+      .boot-capsule-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .boot-status {
+        font-size: 11px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .boot-progress-text {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .boot-progress-track {
+        height: 6px;
+        margin-top: 20px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .boot-progress-bar {
+        height: 100%;
+        width: 10%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #60a5fa, #6366f1, #a78bfa);
+        transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .boot-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .boot-meta-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .boot-meta span.is-active {
+        color: rgba(255, 255, 255, 0.72);
+      }
+
+      .boot-caret {
+        width: 8px;
+        height: 16px;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        animation: bootBlink 1s linear infinite;
+      }
+
+      .boot-bottom {
+        display: flex;
+        justify-content: center;
+      }
+
+      .boot-bottom span {
+        font-size: 11px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      @keyframes bootBlink {
+        0%,
+        100% {
+          opacity: 0.2;
+        }
+
+        50% {
+          opacity: 1;
+        }
+      }
+
+      @media (min-width: 960px) {
+        #boot-preloader {
+          padding: 32px 48px;
+        }
+
+        .boot-capsule {
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <link rel="icon" type="image/png" href="/favicon.webp" />
+    <link rel="apple-touch-icon" href="/favicon.webp" />
+    <link rel="shortcut icon" href="/favicon.webp" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="canonical" href="https://anushkaisuranga.github.io/" />
+
+    <meta
+      name="description"
+      content="Portfolio of %VITE_SITE_NAME%, a %VITE_SITE_ROLE% building clear full-stack products with React, Java, Spring Boot, and polished frontend systems."
+    />
+    <meta
+      name="keywords"
+      content="Anushka Isuranga, Anushka Bandara, software engineer portfolio, React developer, Fullstack developer, full-stack portfolio, Sri Lanka developer"
+    />
+    <meta name="author" content="%VITE_SITE_NAME%" />
+
+    <meta property="og:title" content="%VITE_SITE_NAME% | %VITE_SITE_ROLE%" />
+    <meta
+      property="og:description"
+      content="Explore projects, experience, and contact details for %VITE_SITE_NAME%, a %VITE_SITE_ROLE% focused on clear product delivery."
+    />
+    <meta property="og:image" content="https://anushkaisuranga.github.io/favicon.webp" />
+    <meta property="og:url" content="https://anushkaisuranga.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Anushka Isuranga Portfolio" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="%VITE_SITE_NAME% | %VITE_SITE_ROLE%" />
+    <meta
+      name="twitter:description"
+      content="%VITE_SITE_ROLE% portfolio featuring full-stack builds, case studies, and contact details."
+    />
+    <meta name="twitter:image" content="https://anushkaisuranga.github.io/favicon.webp" />
+
+    <title>%VITE_SITE_NAME% | %VITE_SITE_ROLE%</title>
+
+    <script type="module" src="./src/main.jsx"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "%VITE_SITE_NAME%",
+        "url": "https://anushkaisuranga.github.io/",
+        "sameAs": [
+          "https://www.linkedin.com/in/anushka-isuranga/",
+          "https://github.com/AnushkaIsuranga",
+          "https://www.instagram.com/aka_andy_780/",
+          "https://medium.com/@isuranga880"
+        ],
+        "jobTitle": "%VITE_SITE_ROLE%",
+        "description": "Portfolio of %VITE_SITE_NAME% featuring full-stack products, frontend systems, and software engineering work.",
+        "image": "https://anushkaisuranga.github.io/favicon.webp"
+      }
+    </script>
+
+    <script>
+      if (window.location.hostname === 'anushkaisuranga.github.io') {
+        const script = document.createElement('script')
+        script.async = true
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-0FJH61PY0G'
+        document.head.appendChild(script)
+
+        window.dataLayer = window.dataLayer || []
+        window.gtag = function gtag() {
+          window.dataLayer.push(arguments)
+        }
+
+        window.gtag('js', new Date())
+        window.gtag('config', 'G-0FJH61PY0G')
+      }
+    </script>
+  </head>
+  <body>
+    <div id="boot-preloader" aria-hidden="true">
+      <div class="boot-background" aria-hidden="true">
+        <div id="boot-dotfield" class="boot-dotfield"></div>
+      </div>
+
+      <div class="boot-top">
+        <div class="boot-brand">
+          <img src="/favicon.webp" alt="" width="34" height="34" />
+          <div>
+            <div class="boot-name">%VITE_SITE_NAME%</div>
+            <div class="boot-role">%VITE_SITE_ROLE%</div>
+          </div>
+        </div>
+
+        <div class="boot-skip">Booting interface</div>
+      </div>
+
+      <div class="boot-center">
+        <div class="boot-center-inner">
+          <div class="boot-kicker">Loading portfolio</div>
+          <h1 class="boot-word">ANUSHKA</h1>
+
+          <div class="boot-capsule">
+            <div class="boot-capsule-row">
+              <div id="boot-status" class="boot-status">Loading shell</div>
+              <div id="boot-progress-text" class="boot-progress-text">10%</div>
+            </div>
+
+            <div class="boot-progress-track">
+              <div id="boot-progress-bar" class="boot-progress-bar"></div>
+            </div>
+
+            <div class="boot-meta">
+              <div class="boot-meta-list">
+                <span class="boot-stage is-active">Shell</span>
+                <span class="boot-stage">Type</span>
+                <span class="boot-stage">Media</span>
+              </div>
+
+              <div class="boot-caret"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="boot-bottom">
+        <span>Hello World!</span>
+      </div>
+    </div>
+
+    <div id="root"></div>
+    <script>
+      ;(() => {
+        const bootLoader = document.getElementById('boot-preloader')
+        const statusElement = document.getElementById('boot-status')
+        const progressTextElement = document.getElementById('boot-progress-text')
+        const progressBarElement = document.getElementById('boot-progress-bar')
+        const stageElements = Array.from(document.querySelectorAll('.boot-stage'))
+        let progress = 10
+
+        const syncStages = (value) => {
+          const stageIndex = value < 34 ? 0 : value < 67 ? 1 : 2
+          stageElements.forEach((element, index) => {
+            element.classList.toggle('is-active', index <= stageIndex)
+          })
+        }
+
+        const setProgress = (value) => {
+          progress = Math.max(progress, Math.min(100, Math.round(value)))
+          progressBarElement.style.width = `${progress}%`
+          progressTextElement.textContent = `${progress}%`
+          syncStages(progress)
+        }
+
+        const setStatus = (value) => {
+          statusElement.textContent = value
+        }
+
+        const hide = () => {
+          if (!bootLoader || bootLoader.classList.contains('is-hidden')) {
+            return
+          }
+
+          window.dispatchEvent(new CustomEvent('bootloader:hide'))
+          bootLoader.classList.add('is-hidden')
+          window.setTimeout(() => {
+            bootLoader.remove()
+          }, 360)
+        }
+
+        const progressTimer = window.setInterval(() => {
+          if (progress < 74) {
+            setProgress(progress + (progress < 36 ? 5 : progress < 58 ? 3 : 1))
+          }
+        }, 220)
+
+        const hardTimeout = window.setTimeout(() => {
+          setStatus('Launching interface')
+          setProgress(100)
+          window.clearInterval(progressTimer)
+          hide()
+        }, 12000)
+
+        window.addEventListener(
+          'load',
+          () => {
+            setStatus('Preparing app')
+            setProgress(24)
+          },
+          { once: true }
+        )
+
+        window.__portfolioBootLoader = {
+          getProgress: () => progress,
+          hide: () => {
+            window.clearTimeout(hardTimeout)
+            window.clearInterval(progressTimer)
+            hide()
+          },
+          setProgress: (value) => {
+            setProgress(value)
+          },
+          setStatus: (value) => {
+            setStatus(value)
+          },
+        }
+      })()
+    </script>
+  </body>
+</html>
