@@ -149,7 +149,7 @@
 
 
 
-  <section id="about" class="content-section">
+  <section id="about" class="content-section about-section">
     <div class="content-container">
       <h2 style="
             font-family: &quot;Poppins&quot;, sans-serif;
@@ -173,8 +173,53 @@
           </p>
         </div>
       </div>
+
+    <div class="about-parallax-scaffold" aria-hidden="true">
+      <div id="aboutParallaxTarget" class="about-parallax-target">
+        <div class="about-glass-card glass-card">
+          <section class="about-container" aria-label="About Me">
+            <div class="about-content">
+              <span class="badge">About Me</span>
+              <h1 class="heading">Crafting Digital<br><span>Experiences</span></h1>
+              <p class="description">
+                I'm a developer passionate about building immersive, motion-rich interfaces.
+                I blend clean code with creative design to craft experiences that feel alive.
+              </p>
+
+              <div class="stats-container">
+                <div class="stat-item">
+                  <span class="stat-number">5+</span>
+                  <span class="stat-label">Years Exp.</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">50+</span>
+                  <span class="stat-label">Projects</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">30+</span>
+                  <span class="stat-label">Clients</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="about-image-wrapper">
+              <img src="profile.png" alt="Profile Portrait" class="profile-img">
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div id="aboutParallaxImageWrap" class="about-parallax-imagewrap">
+        <div class="about-liquid-surface">
+          <div class="about-wave about-wave-1"></div>
+          <div class="about-wave about-wave-2"></div>
+          <div class="about-wave about-wave-3"></div>
+        </div>
+      </div>
     </div>
-  </section>
+
+  </div>
+</section>
 
   <section id="services" class="content-section">
     <div class="content-container">
@@ -386,6 +431,7 @@
   <script src="dotfield.js"></script>
   <script src="splashcursor.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script src="about_parallax.js"></script>
 
   <script>
     // SplashCursor HTML integration (React-to-plain-JS conversion)
