@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: akshay-pk-portfolio
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .

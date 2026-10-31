@@ -14,6 +14,28 @@ I am a Computer Science and Engineering student at **College of Engineering Chen
 
 ---
 
+## Deployment
+
+This repository is a static website. The homepage (`index.html`) and its assets
+are served from the repository root; no package installation or build command
+is required.
+
+### Render
+
+1. Import this GitHub repository into Render as a Blueprint, or create a static
+   site from the repository.
+2. Select the branch you want to publish.
+3. If configuring the site manually, leave the build command empty and set the
+   publish directory to `.` (the repository root). The included `render.yaml`
+   contains these settings for Blueprint deployments.
+
+### GitHub Pages
+
+The GitHub Actions workflow in `.github/workflows/static.yml` publishes the
+repository root. Enable GitHub Pages with **GitHub Actions** as the build and
+deployment source, then push to the branch configured in that workflow. Update
+the workflow's branch filter if you change the production branch.
+
 ## About Me
 
 I am a student developer from Kerala, India, pursuing a **B.Tech in Computer Science and Engineering at College of Engineering Chengannur**. I enjoy learning by building practical projects across web development, backend systems, databases, automation, and local AI.
