@@ -17,7 +17,7 @@ html {
   justify-content: space-between;
   gap: clamp(2rem, 6vh, 4rem);
   padding:
-    clamp(6.5rem, 15vh, 9.5rem)
+    clamp(4rem, 9vh, 6rem)
     clamp(1.25rem, 4vw, 3.5rem)
     clamp(1.75rem, 4vh, 2.75rem);
   background: #000;
