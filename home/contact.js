@@ -15,10 +15,23 @@
   "use strict";
 
   /*
-   * Connect delivery here: set this to a POST endpoint (Formspree, Basin, your
-   * own API route, ...) and the form will submit to it as JSON.
-   * While it is null the form only validates and reports "not connected yet".
+   * ---- Send-to-email (no backend required) ----
+   *
+   * "Send message" delivers the form straight to your inbox through
+   * FormSubmit (https://formsubmit.co), which turns a plain POST into an email.
+   * No account or API key is needed, so this works on any static host, including
+   * file:// previews and Render/Netlify/GitHub Pages deployments.
+   *
+   * One-time setup: the very first submission makes FormSubmit send an
+   * activation email to SEND_TO_EMAIL. Click the link in it once and every
+   * later message arrives normally.
+   *
+   * Prefer a different provider (Formspree, your own API route, ...)? Set
+   * DELIVERY_ENDPOINT to a URL that accepts JSON and it takes priority.
    */
+  var SEND_TO_EMAIL = "akshayganesh239@gmail.com";
+  var FORMSUBMIT_URL = "https://formsubmit.co/ajax/" + SEND_TO_EMAIL;
+  var FORMSUBMIT_FORM_URL = "https://formsubmit.co/" + SEND_TO_EMAIL;
   var DELIVERY_ENDPOINT = null;
 
   var overlay = document.getElementById("contact-overlay");
@@ -162,7 +175,175 @@
     if (kind) statusEl.classList.add("is-" + kind);
   }
 
+  /* ---------------------------------------------------------- delivery */
+
+  // Build the exact field set sent to the mail provider.
+  function buildPayload(data) {
+    return {
+      name: data.name,
+      email: data.email,
+      message: data.message,
+      _subject: "Portfolio message from " + (data.name || "a visitor"),
+      _template: "table",
+      _captcha: "false"
+    };
+  }
+
+  // POST JSON and surface a readable reason when the provider rejects it.
+  function postJSON(url, payload) {
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.text().then(function (text) {
+        var json = null;
+        try {
+          json = text ? JSON.parse(text) : null;
+        } catch (err) {
+          // Non-JSON reply: only trust a 2xx status.
+        }
+
+        if (!res.ok) {
+          throw new Error((json && json.message) || "Request failed with " + res.status + ".");
+        }
+        if (json && String(json.success) === "false") {
+          throw new Error(json.message || "The message was rejected.");
+        }
+        return json;
+      });
+    });
+  }
+
+  // Fallback for origins where fetch() is blocked (CORS on file://, ad blockers):
+  // a real form POST into a hidden frame is a plain navigation, so it always goes through.
+  function postWithoutCors(data) {
+    return new Promise(function (resolve, reject) {
+      if (!document.body) {
+        reject(new Error("Page is not ready."));
+        return;
+      }
+
+      var frameName = "contact-delivery-" + Date.now();
+      var frame = document.createElement("iframe");
+      frame.name = frameName;
+      frame.title = "Contact form delivery";
+      frame.setAttribute("aria-hidden", "true");
+      frame.style.cssText = "position:absolute;width:0;height:0;border:0;visibility:hidden;";
+
+      var relay = document.createElement("form");
+      relay.method = "POST";
+      relay.action = FORMSUBMIT_FORM_URL;
+      relay.target = frameName;
+      relay.style.display = "none";
+
+      var payload = buildPayload(data);
+      Object.keys(payload).forEach(function (key) {
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = payload[key];
+        relay.appendChild(input);
+      });
+
+      var settled = false;
+      var blankLoaded = false;
+      var submitted = false;
+      var timer = null;
+      var poll = null;
+      var kick = null;
+
+      function cleanup() {
+        clearTimeout(timer);
+        clearTimeout(kick);
+        clearInterval(poll);
+        if (relay.parentNode) relay.parentNode.removeChild(relay);
+        if (frame.parentNode) frame.parentNode.removeChild(frame);
+      }
+
+      function finish(ok, error) {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        if (ok) resolve();
+        else reject(error);
+      }
+
+      function submitRelay() {
+        if (submitted || settled) return;
+        clearTimeout(kick);
+        clearInterval(poll);
+        submitted = true;
+        relay.submit();
+      }
+
+      // The frame's first load is its own empty document, not our POST response.
+      frame.addEventListener("load", function () {
+        if (!submitted) {
+          blankLoaded = true;
+          return;
+        }
+        finish(true);
+      });
+
+      document.body.appendChild(frame);
+      document.body.appendChild(relay);
+
+      // Send only after the empty frame is in place, so its blank load cannot be
+      // mistaken for a delivered message.
+      poll = setInterval(function () {
+        if (blankLoaded) submitRelay();
+      }, 30);
+
+      // Engines that never fire a load on an empty frame still get to submit.
+      kick = setTimeout(submitRelay, 2500);
+
+      timer = setTimeout(function () {
+        finish(false, new Error("The message could not be delivered in time."));
+      }, 22000);
+    });
+  }
+
+  /**
+   * Send one message to SEND_TO_EMAIL.
+   * @param {{name:string,email:string,message:string}} data
+   * @returns {Promise<{activated?:boolean}>} resolves when delivered, rejects with a reason
+   */
+  function sendMessage(data) {
+    var payload = buildPayload(data);
+    var url = DELIVERY_ENDPOINT || FORMSUBMIT_URL;
+
+    return postJSON(url, payload).then(
+      function (json) {
+        var note = (json && (json.message || json.detail)) || "";
+        return { activated: /activ|confirm/i.test(String(note)) };
+      },
+      function (err) {
+        // Only network/CORS failures are worth retrying through the relay form.
+        var isNetwork =
+          err && (err.name === "TypeError" || /failed to fetch|networkerror|load failed/i.test(err.message || ""));
+        if (!isNetwork || DELIVERY_ENDPOINT) throw err;
+        return postWithoutCors(data).then(function () {
+          return { activated: false, relayed: true };
+        });
+      }
+    );
+  }
+
   /* ---------------------------------------------------------- submission */
+
+  function setSending(busy) {
+    submitting = busy;
+    if (!submitBtn) return;
+    submitBtn.disabled = busy;
+    if (busy) {
+      submitBtn.dataset.idleLabel = submitBtn.textContent;
+      submitBtn.textContent = "Sending…";
+    } else if (submitBtn.dataset.idleLabel) {
+      submitBtn.textContent = submitBtn.dataset.idleLabel;
+      delete submitBtn.dataset.idleLabel;
+    }
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -180,34 +361,29 @@
       message: form.elements.message.value.trim()
     };
 
-    if (!DELIVERY_ENDPOINT) {
-      setStatus(
-        "Looks good — this form is not connected to a delivery service yet, so nothing was sent.",
-        "error"
-      );
-      return;
-    }
+    setSending(true);
+    setStatus("Sending your message…", null);
 
-    submitting = true;
-    if (submitBtn) submitBtn.disabled = true;
-    setStatus("Sending…", null);
-
-    fetch(DELIVERY_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(data)
-    })
-      .then(function (res) {
-        if (!res.ok) throw new Error("Request failed: " + res.status);
-        setStatus("Thanks — your message has been sent.", "success");
+    sendMessage(data)
+      .then(function (result) {
+        setStatus(
+          result && result.activated
+            ? "Message sent. A one-time activation email just went to Akshay's inbox — confirm it so future messages arrive."
+            : "Thanks — your message is on its way to Akshay. He'll reply to " + data.email + ".",
+          "success"
+        );
         form.reset();
       })
-      .catch(function () {
-        setStatus("Something went wrong sending that. Please try again.", "error");
+      .catch(function (err) {
+        setStatus(
+          "Sorry, that didn't send" +
+            (err && err.message ? " (" + err.message + ")" : "") +
+            ". You can email " + SEND_TO_EMAIL + " directly.",
+          "error"
+        );
       })
       .then(function () {
-        submitting = false;
-        if (submitBtn) submitBtn.disabled = false;
+        setSending(false);
       });
   }
 
