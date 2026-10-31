@@ -41,26 +41,6 @@ function initSplashCursor(canvas, customConfig = {}) {
       this.color = [0, 0, 0];
     }
 
-    let config = {
-      SIM_RESOLUTION,
-      DYE_RESOLUTION,
-      CAPTURE_RESOLUTION,
-      DENSITY_DISSIPATION,
-      VELOCITY_DISSIPATION,
-      PRESSURE,
-      PRESSURE_ITERATIONS,
-      CURL,
-      SPLAT_RADIUS,
-      SPLAT_FORCE,
-      SHADING,
-      COLOR_UPDATE_SPEED,
-      PAUSED: false,
-      BACK_COLOR,
-      TRANSPARENT,
-      RAINBOW_MODE,
-      COLOR
-    };
-
     let pointers = [new pointerPrototype()];
 
     const { gl, ext } = getWebGLContext(canvas);

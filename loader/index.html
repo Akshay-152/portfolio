@@ -36,5 +36,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="script.js"></script>
+    <script>
+      // Safety net: the loader only completes when its CDN libraries loaded.
+      // If one of them failed (offline, blocked), don't strand the visitor on
+      // the loading screen — continue to the portfolio after a short wait.
+      setTimeout(function () {
+        if (window.THREE && window.gsap) return;
+        var el = document.getElementById("neon-cube-loader");
+        var next = (el && el.getAttribute("data-next-page")) || "/home/homepage.html";
+        window.location.replace(next);
+      }, 4000);
+    </script>
   </body>
 </html>

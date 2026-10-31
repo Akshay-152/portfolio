@@ -1,0 +1,102 @@
+/*
+ * cursor.css — styles for the circular cursor indicator and its SVG trail.
+ * Loaded only by home/homepage.html. The whole layer is decorative:
+ * pointer-events:none + aria-hidden, and it never renders on touch devices
+ * or when the visitor prefers reduced motion.
+ */
+
+#cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100; /* above navbar (50) and splash canvas (30) */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+#cursor-layer.is-active {
+  opacity: 1;
+}
+
+.cursor-trail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.cursor-trail-path {
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cursor-follow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  will-change: transform;
+}
+
+.cursor-ring {
+  position: absolute;
+  top: -17px;
+  left: -17px;
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(34, 197, 94, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.28);
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 220ms ease,
+    border-color 220ms ease;
+}
+
+.cursor-ring::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
+}
+
+/* Interactive target: the ring grows and fills. Label-free, so state is
+   communicated by size + shape as well as colour. */
+#cursor-layer.is-hovering .cursor-ring {
+  transform: scale(1.55);
+  background: rgba(34, 197, 94, 0.12);
+  border-color: #4ade80;
+}
+
+#cursor-layer.is-hovering .cursor-ring::after {
+  transform: scale(0.55);
+}
+
+/* Native pointer stays visible unless the effect is actually running. */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none;
+}
+
+html.has-custom-cursor input,
+html.has-custom-cursor textarea,
+html.has-custom-cursor [contenteditable="true"] {
+  cursor: text;
+}
+
+/* Capability fallbacks: touch-first devices, coarse pointers, reduced motion. */
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  #cursor-layer {
+    display: none !important;
+  }
+}

@@ -1,0 +1,504 @@
+/*
+ * contact.css — footer composition and the contact overlay.
+ */
+
+/* ============================ Footer ============================ */
+
+/* Reserve the gutter so locking scroll behind the modal doesn't shift layout. */
+html {
+  scrollbar-gutter: stable;
+}
+
+.footer-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(2rem, 6vh, 4rem);
+  padding:
+    clamp(6.5rem, 15vh, 9.5rem)
+    clamp(1.25rem, 4vw, 3.5rem)
+    clamp(1.75rem, 4vh, 2.75rem);
+  background: #000;
+  color: #fff;
+  z-index: 10;
+}
+
+.footer-section :focus-visible {
+  outline: 2px solid #f4f4f4;
+  outline-offset: 4px;
+}
+
+/* Footer content sits above the section's layered background. */
+.footer-nav,
+.footer-grid,
+.footer-base {
+  position: relative;
+  z-index: 2;
+}
+
+.footer-nav {
+  position: absolute;
+  z-index: 2;
+  top: clamp(5.5rem, 13vh, 7.5rem);
+  right: clamp(1.25rem, 4vw, 3.5rem);
+  display: flex;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.footer-nav a {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.footer-nav a:hover,
+.footer-nav a[aria-current="true"] {
+  color: #fff;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+  flex: 1;
+}
+
+/* Right column: contact details (fills the space the removed red filament
+   used to occupy). */
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.1rem, 2.5vw, 1.6rem);
+  padding-top: clamp(0.5rem, 1.5vw, 1rem);
+}
+
+.footer-contact-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+  animation: footerPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes footerPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(34, 197, 94, 0.08);
+  }
+}
+
+.footer-contact-mail {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(1.35rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 0.15em;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.footer-contact-mail:hover,
+.footer-contact-mail:focus-visible {
+  color: #22c55e;
+  border-bottom-color: rgba(34, 197, 94, 0.7);
+}
+
+.footer-contact-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2.5rem);
+}
+
+.footer-contact-meta dt {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.4rem;
+}
+
+.footer-contact-meta dd {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.footer-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-contact-links a {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.footer-contact-links a:hover,
+.footer-contact-links a:focus-visible {
+  color: #fff;
+}
+
+@media (max-width: 899px) {
+  .footer-contact-meta {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-dot {
+    animation: none;
+  }
+}
+
+.footer-title {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(2rem, 4.8vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.footer-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: clamp(1.75rem, 3.5vw, 2.75rem);
+  padding: 0 0 0.35rem;
+  background: none;
+  border: 0;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.footer-cta::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.25s ease;
+}
+
+.footer-cta:hover::after,
+.footer-cta:focus-visible::after {
+  transform: scaleX(0.45);
+}
+
+.footer-cta .cta-arrow {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.footer-cta:hover .cta-arrow,
+.footer-cta:focus-visible .cta-arrow {
+  transform: translate(4px, -4px);
+}
+
+.footer-base {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.back-to-top {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.back-to-top:hover {
+  color: #fff;
+}
+
+@media (min-width: 900px) {
+  .footer-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* ====================== Contact overlay ======================== */
+
+.contact-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90; /* above the navbar (50), below the custom cursor (100) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 3rem);
+}
+
+.contact-overlay[hidden] {
+  display: none;
+}
+
+.contact-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.contact-overlay.is-open .contact-backdrop {
+  opacity: 1;
+}
+
+.contact-panel {
+  position: relative;
+  width: min(1080px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  padding: clamp(1.75rem, 4vw, 3.5rem);
+  background: #070807;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.contact-overlay.is-open .contact-panel {
+  opacity: 1;
+  transform: none;
+}
+
+@media (min-width: 900px) {
+  .contact-panel {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}
+
+.contact-close {
+  position: absolute;
+  top: clamp(0.85rem, 2vw, 1.4rem);
+  right: clamp(0.85rem, 2vw, 1.4rem);
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.contact-close:hover {
+  color: #fff;
+  border-color: rgba(255, 68, 51, 0.7);
+  transform: rotate(90deg);
+}
+
+.contact-title {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.contact-title .accent {
+  color: #ff4433;
+}
+
+.contact-note {
+  margin-top: 1.1rem;
+  max-width: 34ch;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.contact-form {
+  display: block;
+}
+
+.field {
+  margin-bottom: 1.4rem;
+}
+
+.field label {
+  display: block;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.05rem;
+  padding: 0.5rem 0;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.25s ease;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-bottom-color: #ff4433;
+}
+
+.field input[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-bottom-color: #ff8a75;
+}
+
+.field-error {
+  min-height: 1.15em;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #ff8a75;
+}
+
+.contact-submit {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+  padding: 0 0 0.35rem;
+  background: none;
+  border: 0;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.contact-submit::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform-origin: left center;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.25s ease;
+}
+
+.contact-submit:hover:not(:disabled)::after,
+.contact-submit:focus-visible::after {
+  transform: scaleX(0.45);
+}
+
+.contact-submit:disabled {
+  color: rgba(255, 255, 255, 0.45);
+  cursor: not-allowed;
+}
+
+.form-status {
+  min-height: 1.4em;
+  margin-top: 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.form-status.is-error {
+  color: #ff8a75;
+}
+
+.form-status.is-success {
+  color: #20d66b;
+}
+
+.contact-overlay :focus-visible {
+  outline: 2px solid #f4f4f4;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .contact-panel {
+    max-height: 86vh;
+  }
+  .contact-note {
+    max-width: none;
+  }
+}

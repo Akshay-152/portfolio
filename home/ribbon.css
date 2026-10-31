@@ -1,0 +1,102 @@
+/*
+ * ribbon.css — the cinematic light ribbon that connects the landing page to
+ * the About section, plus the brief heading highlight it triggers.
+ *
+ * Purely decorative: a fixed overlay with pointer-events:none and aria-hidden,
+ * layered strokes instead of an expensive blur filter, clipped at the viewport
+ * boundary so the beam reads as continuing beyond the screen, and no rendering
+ * at all when the visitor prefers reduced motion.
+ */
+
+#light-ribbon {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 35; /* above page content (10) and the splash canvas (30), below the navbar (50) */
+  pointer-events: none;
+  overflow: hidden; /* anything outside the viewport is part of the off-screen connector */
+}
+
+/* Groups start invisible; ribbon.js drives the fade envelope inline. */
+#light-ribbon .ribbon-group {
+  opacity: 0;
+}
+
+#light-ribbon .ribbon-stroke {
+  fill: none;
+}
+
+/* Thin, crisp luminous core. */
+#light-ribbon .ribbon-core {
+  stroke-width: 1.6;
+  opacity: 0.95;
+}
+
+/* Restrained white highlight riding the leading tip. */
+#light-ribbon .ribbon-head {
+  stroke-width: 2.6;
+  opacity: 0.9;
+}
+
+#light-ribbon .ribbon-mid {
+  stroke-width: 4;
+  opacity: 0.4;
+}
+
+/* Subtle green outer glow, built from a wide translucent stroke rather than a blur.
+   ribbon.js lifts these two briefly as the beam reaches the heading. */
+#light-ribbon .ribbon-glow {
+  stroke-width: 13;
+  opacity: 0.13;
+}
+
+/* Narrow viewports: thinner strokes and a lighter glow (ribbon.js also lowers
+   the glow opacity on these widths). */
+@media (max-width: 760px) {
+  #light-ribbon .ribbon-glow {
+    stroke-width: 9;
+  }
+  #light-ribbon .ribbon-mid {
+    stroke-width: 3;
+  }
+  #light-ribbon .ribbon-head {
+    stroke-width: 2.2;
+  }
+}
+
+/* --- heading interaction -------------------------------------------------
+   A narrow pale-green band sweeps left to right across the heading while the
+   beam passes. multiply keeps it invisible over the near-black background and
+   only tints the white glyphs, so the text never changes wholesale.          */
+
+.about-heading {
+  position: relative;
+  --sweep: 0;
+}
+
+.about-heading::after {
+  content: "";
+  position: absolute;
+  top: -8%;
+  bottom: -8%;
+  left: -55%;
+  width: 55%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(201, 255, 224, 0) 0%,
+    rgba(201, 255, 224, 0.3) 42%,
+    rgba(234, 255, 244, 0.95) 50%,
+    rgba(201, 255, 224, 0.3) 58%,
+    rgba(201, 255, 224, 0) 100%
+  );
+  transform: translate3d(calc(var(--sweep) * 290%), 0, 0);
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-heading::after {
+    display: none;
+  }
+}
