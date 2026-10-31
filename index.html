@@ -115,12 +115,12 @@
     </div>
     <div class="nav-content">
       <ul>
-        <li><a href="#" data-text="Home" onclick="toggleMenu()">Home</a></li>
-        <li><a href="#about" data-text="About" onclick="toggleMenu()">About</a></li>
-        <li><a href="#skills" data-text="Skills" onclick="toggleMenu()">Skills</a></li>
-        <li><a href="#work" data-text="Work" onclick="toggleMenu()">Work</a></li>
-        <li><a href="#experience" data-text="Experience" onclick="toggleMenu()">Experience</a></li>
-        <li><a href="#contact" data-text="Contact" onclick="toggleMenu()">Contact</a></li>
+        <li><a href="#hero" data-text="Home">Home</a></li>
+        <li><a href="#about" data-text="About">About</a></li>
+        <li><a href="#skills" data-text="Skills">Skills</a></li>
+        <li><a href="#work" data-text="Work">Work</a></li>
+        <li><a href="#experience" data-text="Experience">Experience</a></li>
+        <li><a href="#contact" data-text="Contact">Contact</a></li>
       </ul>
     </div>
   </div>
@@ -2159,7 +2159,10 @@
 
       // Close full-page overlay menu
       const menu = document.getElementById("fullMenu");
-      if (menu && menu.classList.contains("active")) menu.classList.remove("active");
+      if (menu && menu.classList.contains("active")) {
+        menu.classList.remove("active");
+        menu.setAttribute("aria-hidden", "true");
+      }
 
       // Close matrix drawer
       const drawer = document.getElementById("clock-drawer");

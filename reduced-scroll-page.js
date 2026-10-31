@@ -23,8 +23,8 @@
 
   /* ------------------------------------------------------------- tunables */
 
-  // Distance travelled per wheel tick. 1 = native, 0.35 = roughly a third of it.
-  var DELTA_SCALE = 0.35;
+  // Distance travelled per wheel tick. Lower values allow more controlled scrolling.
+  var DELTA_SCALE = 0.25;
 
   // How fast the page catches up to the target each frame.
   // 0.16 feels deliberate and calm; raise it toward 0.3 for snappier motion.
