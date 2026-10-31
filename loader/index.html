@@ -12,7 +12,7 @@
         id="neon-cube-loader"
         class="neon-cube-loader"
         data-duration="3"
-        data-next-page="/home/homepage.html"
+        data-next-page="../index.html"
         role="status"
         aria-label="Loading"
       >
@@ -43,7 +43,7 @@
       setTimeout(function () {
         if (window.THREE && window.gsap) return;
         var el = document.getElementById("neon-cube-loader");
-        var next = (el && el.getAttribute("data-next-page")) || "/home/homepage.html";
+        var next = (el && el.getAttribute("data-next-page")) || "../index.html";
         window.location.replace(next);
       }, 4000);
     </script>
